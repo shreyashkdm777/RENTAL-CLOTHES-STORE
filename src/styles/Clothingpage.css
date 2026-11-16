@@ -1,0 +1,511 @@
+/* Clothing listing page — all classes are prefixed "cl-" so they never clash with App.css */
+
+.clothing-page {
+    margin-top: 0;
+    /* cancels the 61px top padding App.css puts on <body>, so no global body rule is needed */
+    --cl-ink: #1d1517;
+    --cl-muted: #8a8683;
+    --cl-line: #e8e5e2;
+    --cl-tile: #ecebe9;
+    color: var(--cl-ink);
+    font-family: "DM Sans", Arial, sans-serif;
+}
+
+/* The header from App.css is fixed; here it sits under the announcement bar and sticks on scroll */
+.clothing-page .site-header {
+    position: sticky;
+    top: 0;
+}
+
+/* Announcement bar */
+.cl-announce {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 5%;
+    background: #f8e5df;
+    border-top: 3px solid #c9b49c;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+}
+
+.cl-locale {
+    display: flex;
+    gap: 18px;
+}
+
+.cl-locale button {
+    border: none;
+    background: none;
+    font-size: 11px;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0;
+}
+
+.cl-locale i {
+    font-size: 9px;
+}
+
+/* Page body */
+.cl-main {
+    padding: 0 5% 70px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.cl-crumbs {
+    padding: 22px 0 18px;
+    font-size: 11px;
+    color: var(--cl-muted);
+}
+
+.cl-crumbs a:hover {
+    color: var(--cl-ink);
+}
+
+.cl-crumbs span {
+    color: var(--cl-ink);
+}
+
+.cl-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.4vw, 44px);
+    line-height: 1.1;
+}
+
+.cl-sub {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--cl-muted);
+}
+
+.cl-layout {
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 56px;
+    margin-top: 34px;
+    border-top: 1px solid var(--cl-line);
+    padding-top: 26px;
+}
+
+/* Sidebar */
+.cl-sidebar {
+    align-self: start;
+    position: sticky;
+    top: 84px;
+}
+
+.cl-filter-toggle {
+    display: none;
+}
+
+.cl-filters-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--cl-line);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--cl-muted);
+}
+
+.cl-filters-head button {
+    border: none;
+    background: none;
+    font-size: 11px;
+    letter-spacing: 0;
+    color: var(--cl-muted);
+    text-decoration: underline;
+}
+
+.cl-filters-head button:hover {
+    color: var(--cl-ink);
+}
+
+.cl-group {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--cl-line);
+}
+
+.cl-group h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.cl-check {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 5px 0;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.cl-check span {
+    flex: 1;
+}
+
+.cl-check em {
+    font-style: normal;
+    font-size: 11px;
+    color: var(--cl-muted);
+}
+
+.cl-check input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 13px;
+    height: 13px;
+    margin: 0;
+    flex: none;
+    border: 1px solid #b9b5b1;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+}
+
+.cl-check input:checked {
+    background: var(--cl-ink);
+    border-color: var(--cl-ink);
+}
+
+.cl-check input:checked::after {
+    content: "";
+    position: absolute;
+    left: 3.5px;
+    top: 0.5px;
+    width: 3px;
+    height: 7px;
+    border: solid #fff;
+    border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg);
+}
+
+.cl-check input:focus-visible {
+    outline: 2px solid var(--cl-ink);
+    outline-offset: 2px;
+}
+
+/* Size chips */
+.cl-sizes {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.cl-sizes button {
+    min-width: 32px;
+    height: 28px;
+    padding: 0 8px;
+    border: 1px solid #d8d4d0;
+    background: #fff;
+    font-size: 11px;
+    color: var(--cl-ink);
+}
+
+.cl-sizes button:hover {
+    border-color: var(--cl-ink);
+}
+
+.cl-sizes button.is-on {
+    background: var(--cl-ink);
+    border-color: var(--cl-ink);
+    color: #fff;
+}
+
+/* Dual price slider */
+.cl-range {
+    position: relative;
+    height: 20px;
+    margin: 4px 6px 0;
+}
+
+.cl-range-track,
+.cl-range-fill {
+    position: absolute;
+    top: 9.5px;
+    height: 1px;
+}
+
+.cl-range-track {
+    left: 0;
+    right: 0;
+    background: #cfcac6;
+}
+
+.cl-range-fill {
+    background: var(--cl-ink);
+}
+
+.cl-range input {
+    position: absolute;
+    left: -6px;
+    top: 0;
+    width: calc(100% + 12px);
+    height: 20px;
+    margin: 0;
+    background: none;
+    pointer-events: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.cl-range input::-webkit-slider-runnable-track {
+    height: 20px;
+    background: none;
+}
+
+.cl-range input::-moz-range-track {
+    height: 20px;
+    background: none;
+}
+
+.cl-range input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    pointer-events: auto;
+    cursor: pointer;
+    width: 13px;
+    height: 13px;
+    margin-top: 3.5px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--cl-ink);
+}
+
+.cl-range input::-moz-range-thumb {
+    pointer-events: auto;
+    cursor: pointer;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--cl-ink);
+}
+
+.cl-range-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--cl-muted);
+}
+
+/* Colour swatches */
+.cl-swatches {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.cl-swatches button {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.cl-swatches button.is-on {
+    outline: 1px solid var(--cl-ink);
+    outline-offset: 2px;
+}
+
+/* Toolbar */
+.cl-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    font-size: 11px;
+    color: var(--cl-muted);
+}
+
+.cl-sort select {
+    height: 32px;
+    min-width: 170px;
+    padding: 0 10px;
+    border: 1px solid var(--cl-line);
+    background: #fff;
+    font-size: 11px;
+    color: var(--cl-ink);
+    cursor: pointer;
+}
+
+/* Product grid */
+.cl-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px 18px;
+}
+
+.cl-card {
+    display: block;
+}
+
+.cl-media {
+    position: relative;
+    overflow: hidden;
+    background: var(--cl-tile);
+    aspect-ratio: 1 / 1.08;
+}
+
+.cl-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.cl-card:hover .cl-media img {
+    transform: scale(1.04);
+}
+
+.cl-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+    background: var(--cl-ink);
+    color: #fff;
+    padding: 3px 8px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+}
+
+.cl-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.cl-line h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.cl-line span {
+    font-size: 12px;
+    color: #4a4446;
+    white-space: nowrap;
+}
+
+.cl-meta {
+    margin-top: 3px;
+    font-size: 11px;
+    color: var(--cl-muted);
+}
+
+.cl-empty {
+    padding: 70px 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--cl-muted);
+}
+
+.cl-empty button {
+    margin-top: 14px;
+    padding: 9px 20px;
+    border: 1px solid var(--cl-ink);
+    background: var(--cl-ink);
+    color: #fff;
+    font-size: 12px;
+}
+
+/* Pagination */
+.cl-pages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 52px;
+}
+
+.cl-pages button {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border: 1px solid transparent;
+    background: none;
+    font-size: 11px;
+    color: var(--cl-ink);
+}
+
+.cl-pages button:hover:not(:disabled) {
+    border-color: var(--cl-line);
+}
+
+.cl-pages button.is-on {
+    background: var(--cl-ink);
+    color: #fff;
+}
+
+.cl-pages .cl-next {
+    margin-left: 6px;
+}
+
+.cl-pages button:disabled {
+    color: #bdb9b5;
+    cursor: default;
+}
+
+/* Tablet & mobile */
+@media (max-width: 900px) {
+    .cl-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .cl-sidebar {
+        position: static;
+    }
+
+    .cl-filter-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 16px;
+        border: 1px solid var(--cl-line);
+        background: #fff;
+        font-size: 12px;
+    }
+
+    .cl-filters {
+        display: none;
+        margin-top: 14px;
+    }
+
+    .cl-filters.is-open {
+        display: block;
+    }
+
+    .cl-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px 12px;
+    }
+}
+
+@media (max-width: 560px) {
+    .cl-announce span {
+        font-size: 10px;
+    }
+
+    .cl-locale {
+        display: none;
+    }
+
+    .cl-sort select {
+        min-width: 0;
+    }
+}

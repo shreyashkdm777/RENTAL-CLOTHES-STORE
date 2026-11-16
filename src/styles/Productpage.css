@@ -1,0 +1,440 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
+
+/* Product page — every rule is scoped to .product-page / "pd-" classes, so no other page is affected */
+
+.product-page {
+    margin-top: 0;
+    /* cancels the 61px top padding App.css puts on <body>, so no global body rule is needed */
+    --pd-ink: #111;
+    --pd-muted: #8a8579;
+    --pd-line: #e6e2da;
+    --pd-brown: #6b5230;
+    --pd-mono: "DM Mono", ui-monospace, Menlo, Consolas, monospace;
+    background: #fff;
+    color: var(--pd-ink);
+    font-family: "DM Sans", Arial, sans-serif;
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+/* The header from App.css is fixed; here it sits under the announcement bar and sticks on scroll */
+.product-page .site-header {
+    position: sticky;
+    top: 0;
+}
+
+.product-page .bag-count {
+    background: #000;
+}
+
+/* Announcement bar */
+.pd-announce {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 5%;
+    background: #f8e5df;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #6b1d34;
+}
+
+.pd-locale {
+    display: flex;
+    gap: 26px;
+}
+
+.pd-locale button {
+    border: none;
+    background: none;
+    font-size: 10px;
+    color: var(--pd-ink);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pd-locale i {
+    font-size: 9px;
+}
+
+.pd-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.pd-crumbs {
+    padding: 30px 0 22px 8px;
+    font-size: 10px;
+    color: var(--pd-muted);
+}
+
+.pd-crumbs a:hover {
+    color: var(--pd-ink);
+}
+
+.pd-crumbs span {
+    color: var(--pd-ink);
+}
+
+.pd-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 50px;
+    align-items: start;
+}
+
+/* Gallery */
+.pd-main {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1.12;
+    background: #ecebe9;
+    border: 1px solid #e4e1dc;
+}
+
+.pd-main img,
+.pd-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.pd-emblem {
+    position: absolute;
+    top: 24px;
+    right: 26px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: 1px solid var(--pd-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-size: 20px;
+}
+
+.pd-emblem::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 1px solid var(--pd-ink);
+}
+
+.pd-thumbs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.pd-thumb {
+    aspect-ratio: 1.2 / 1;
+    padding: 0;
+    overflow: hidden;
+    background: #ecebe9;
+    border: 1px solid #e4e1dc;
+    cursor: pointer;
+}
+
+.pd-thumb.is-on {
+    border: 1.5px solid var(--pd-ink);
+}
+
+/* Details */
+.pd-info {
+    max-width: 400px;
+}
+
+.pd-info h1 {
+    font-size: clamp(26px, 3vw, 32px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+.pd-rating {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 12px;
+    font-size: 10px;
+    color: var(--pd-muted);
+}
+
+.pd-stars {
+    display: inline-flex;
+    gap: 2px;
+    color: var(--pd-brown);
+    font-size: 11px;
+}
+
+.pd-price {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--pd-brown);
+}
+
+.pd-price small {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--pd-muted);
+}
+
+.pd-info hr {
+    border: none;
+    border-top: 1px solid var(--pd-line);
+    margin: 22px 0;
+}
+
+.pd-desc {
+    max-width: 310px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--pd-muted);
+}
+
+.pd-label {
+    margin-top: 26px;
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.pd-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 4px;
+}
+
+.pd-guide {
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 9.5px;
+    color: var(--pd-ink);
+}
+
+.pd-guide:hover {
+    text-decoration: underline;
+}
+
+.pd-guide-note {
+    margin-top: 12px;
+    font-size: 10.5px;
+    line-height: 1.6;
+    color: var(--pd-muted);
+}
+
+.pd-swatches {
+    display: flex;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.pd-swatches button {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.pd-swatches button.is-on {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--pd-ink);
+}
+
+.pd-sizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.pd-sizes button {
+    min-width: 38px;
+    height: 32px;
+    padding: 0 10px;
+    background: #fff;
+    border: 1px solid #d9d5cc;
+    border-radius: 2px;
+    font-size: 10px;
+    color: var(--pd-ink);
+}
+
+.pd-sizes button:hover {
+    border-color: var(--pd-ink);
+}
+
+.pd-sizes button.is-on {
+    background: #000;
+    border-color: #000;
+    color: #fff;
+}
+
+/* Quantity + add to bag */
+.pd-buy {
+    display: flex;
+    gap: 10px;
+    margin-top: 26px;
+}
+
+.pd-qty {
+    display: flex;
+    align-items: center;
+    width: 95px;
+    height: 38px;
+    flex: none;
+    background: #fff;
+    border: 1px solid #d9d5cc;
+    border-radius: 2px;
+}
+
+.pd-qty button {
+    width: 30px;
+    height: 100%;
+    border: none;
+    background: none;
+    font-size: 13px;
+    color: var(--pd-ink);
+}
+
+.pd-qty button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.pd-qty span {
+    flex: 1;
+    text-align: center;
+    font-family: var(--pd-mono);
+    font-size: 10px;
+}
+
+.pd-add {
+    flex: 1;
+    height: 38px;
+    padding: 0 12px;
+    border: none;
+    border-radius: 2px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--pd-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+}
+
+.pd-add:hover {
+    background: #2a2a2a;
+}
+
+.pd-trust {
+    list-style: none;
+    margin-top: 14px;
+    display: grid;
+    gap: 8px;
+    font-size: 10px;
+    color: var(--pd-muted);
+}
+
+.pd-trust i {
+    margin-right: 6px;
+    color: var(--pd-ink);
+}
+
+/* Accordion */
+.pd-acc {
+    margin-top: 28px;
+    border-bottom: 1px solid var(--pd-line);
+}
+
+.pd-acc-item {
+    border-top: 1px solid var(--pd-line);
+}
+
+.pd-acc-item button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 16px 0;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--pd-ink);
+}
+
+.pd-acc-item button i {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--pd-muted);
+}
+
+.pd-acc-item p {
+    padding-bottom: 16px;
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--pd-muted);
+}
+
+/* Not found */
+.pd-missing {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.pd-missing h1 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+
+.pd-missing .pd-add {
+    display: inline-flex;
+    padding: 0 28px;
+    flex: none;
+}
+
+/* Tablet & mobile */
+@media (max-width: 900px) {
+    .pd-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .pd-info {
+        max-width: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .pd-wrap {
+        padding: 0 16px;
+    }
+
+    .pd-locale {
+        display: none;
+    }
+
+    .pd-announce span {
+        font-size: 10px;
+    }
+
+    .pd-thumbs {
+        gap: 8px;
+    }
+}

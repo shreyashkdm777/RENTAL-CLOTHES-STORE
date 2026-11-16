@@ -1,0 +1,626 @@
+/* Orders page — every rule is scoped to .orders-page / "or-" classes, so no other page is affected.
+   Colors are your RentWear theme: maroon #6b1d34, ink #1d1517, muted #6e6266, gold #b08d57, blush #f8efe9. */
+
+.orders-page {
+    margin-top: 0;
+    /* cancels the 61px top padding App.css puts on <body>, so no global body rule is needed */
+    --or-ink: #1d1517;
+    --or-muted: #6e6266;
+    --or-maroon: #6b1d34;
+    --or-gold: #b08d57;
+    --or-blush: #f8f4f4;
+    --or-line: #eadfd8;
+    --or-tile: #f1e8e1;
+    background: #fffdf9;
+    color: var(--or-ink);
+    font-family: "DM Sans", Arial, sans-serif;
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+/* The header from App.css is fixed; here it sits under the announcement bar and sticks on scroll */
+.orders-page .site-header {
+    position: sticky;
+    top: 0;
+}
+
+/* Announcement bar */
+.or-announce {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 5%;
+    background: #f8e5df;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--or-maroon);
+}
+
+.or-locale {
+    display: flex;
+    gap: 26px;
+}
+
+.or-locale button {
+    border: none;
+    background: none;
+    font-size: 10px;
+    color: var(--or-ink);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.or-locale i {
+    font-size: 9px;
+}
+
+/* Title area — left-aligned like Accessories */
+.or-wrap {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.or-head {
+    border-bottom: 1px solid var(--or-line);
+    padding-top: 28px;
+    padding-bottom: 20px;
+    text-align: left;
+}
+
+.or-head .or-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.or-crumbs {
+    padding-top: 26px;
+    font-size: 11px;
+    color: var(--or-muted);
+    text-align: left;
+}
+
+.or-crumbs a:hover {
+    color: var(--or-maroon);
+}
+
+.or-crumbs span {
+    color: var(--or-ink);
+}
+
+.or-title-row {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    gap: 14px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.or-title-row h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.4vw, 38px);
+    line-height: 1.1;
+    text-align: left;
+    margin: 0;
+}
+
+.or-title-row span {
+    font-size: 13px;
+    color: var(--or-muted);
+}
+
+.or-main {
+    margin-top: 32px;
+    display: grid;
+    gap: 24px;
+}
+
+/* Thank-you banner */
+.or-banner {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px 22px;
+    background: #fff;
+    border: 1px solid var(--or-line);
+    border-left: 4px solid var(--or-maroon);
+    border-radius: 6px;
+}
+
+.or-banner i {
+    font-size: 20px;
+    color: var(--or-maroon);
+}
+
+.or-banner strong {
+    font-size: 14px;
+}
+
+.or-banner p {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--or-muted);
+}
+
+/* Order card */
+.or-card {
+    background: #fff;
+    border: 1px solid var(--or-line);
+    border-radius: 6px;
+    overflow: hidden;
+    scroll-margin-top: 90px;
+}
+
+.or-card.is-new {
+    border-color: var(--or-maroon);
+    box-shadow: 0 0 0 1px var(--or-maroon);
+}
+
+.or-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 22px 26px;
+    border-bottom: 1px solid var(--or-line);
+}
+
+.or-kicker {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--or-gold);
+    font-weight: 600;
+}
+
+.or-card-head h2 {
+    margin-top: 4px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--or-maroon);
+}
+
+.or-date {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--or-muted);
+}
+
+.or-head-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.or-head-right strong {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.or-pill {
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: var(--or-blush);
+    border: 1px solid var(--or-line);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--or-maroon);
+}
+
+/* Remove order button */
+.or-remove-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--or-line);
+    background: #fff;
+    color: var(--or-muted);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.or-remove-btn:hover {
+    border-color: var(--or-maroon);
+    background: var(--or-maroon);
+    color: #fff;
+}
+
+/* Progress tracker */
+.or-track {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 26px 26px 8px;
+}
+
+.or-track li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+}
+
+.or-track li::before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    right: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--or-line);
+}
+
+.or-track li:first-child::before {
+    display: none;
+}
+
+.or-track li.is-done::before {
+    background: var(--or-maroon);
+}
+
+.or-track span {
+    position: relative;
+    z-index: 1;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid #d9ccc6;
+    color: var(--or-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.or-track li.is-done span {
+    background: var(--or-maroon);
+    border-color: var(--or-maroon);
+    color: #fff;
+}
+
+.or-track li.is-current span {
+    box-shadow: 0 0 0 4px rgba(107, 29, 52, 0.15);
+}
+
+.or-track em {
+    font-style: normal;
+    font-size: 11px;
+    color: var(--or-muted);
+}
+
+.or-track li.is-done em {
+    color: var(--or-ink);
+    font-weight: 600;
+}
+
+.or-note {
+    margin: 14px 26px 0;
+    padding: 10px 14px;
+    background: var(--or-blush);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--or-muted);
+}
+
+/* Items + summary */
+.or-body {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 28px;
+    padding: 24px 26px;
+    align-items: start;
+}
+
+.or-items {
+    list-style: none;
+    display: grid;
+    gap: 18px;
+}
+
+.or-items li {
+    display: grid;
+    grid-template-columns: 76px 1fr auto;
+    gap: 16px;
+    align-items: start;
+}
+
+.or-thumb {
+    width: 76px;
+    height: 76px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--or-tile);
+}
+
+.or-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.or-items h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.or-items p {
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--or-muted);
+}
+
+.or-items a {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--or-maroon);
+}
+
+.or-items a:hover {
+    text-decoration: underline;
+}
+
+.or-items li>span {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.or-summary {
+    padding: 18px 18px 14px;
+    background: var(--or-blush);
+    border-radius: 6px;
+}
+
+.or-summary h3 {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    color: var(--or-gold);
+}
+
+.or-summary dl {
+    margin-top: 10px;
+}
+
+.or-summary dl>div {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 13px;
+    color: var(--or-muted);
+}
+
+.or-summary dd {
+    color: var(--or-ink);
+}
+
+.or-summary .or-total {
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--or-line);
+    font-weight: 700;
+    color: var(--or-ink);
+}
+
+/* Delivery / payment details */
+.or-foot {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 22px 26px 26px;
+    border-top: 1px solid var(--or-line);
+}
+
+.or-foot h3 {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--or-gold);
+}
+
+.or-foot p {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--or-muted);
+}
+
+/* Empty state */
+.or-empty {
+    padding: 70px 24px;
+    background: #fff;
+    border: 1px solid var(--or-line);
+    border-radius: 6px;
+    text-align: center;
+}
+
+.or-empty i {
+    font-size: 34px;
+    color: var(--or-gold);
+}
+
+.or-empty h2 {
+    margin-top: 12px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 26px;
+    font-weight: 500;
+}
+
+.or-empty p {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--or-muted);
+}
+
+.or-btn {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 12px 28px;
+    border-radius: 6px;
+    background: var(--or-maroon);
+    border: 1px solid var(--or-maroon);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.or-btn:hover {
+    background: #fff;
+    color: var(--or-maroon);
+}
+
+.or-continue {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--or-maroon);
+}
+
+.or-continue:hover {
+    text-decoration: underline;
+}
+
+/* Tablet & mobile */
+@media (max-width: 900px) {
+    .or-body {
+        grid-template-columns: 1fr;
+    }
+
+    .or-foot {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+}
+
+@media (max-width: 560px) {
+    .or-wrap {
+        padding: 0 14px;
+    }
+
+    .or-locale {
+        display: none;
+    }
+
+    .or-announce span {
+        font-size: 10px;
+    }
+
+    .or-card-head,
+    .or-body,
+    .or-foot {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .or-track {
+        padding: 22px 8px 6px;
+    }
+
+    .or-track em {
+        font-size: 9.5px;
+    }
+
+    .or-note {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+
+    .or-items li {
+        grid-template-columns: 64px 1fr;
+    }
+
+    .or-thumb {
+        width: 64px;
+        height: 64px;
+    }
+
+    .or-items li>span {
+        grid-column: 2;
+    }
+}
+
+/* Title area — left-aligned like Accessories */
+.or-wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 5%;
+}
+
+.or-head {
+    border-bottom: 1px solid var(--or-line);
+    padding-top: 28px;
+    padding-bottom: 24px;
+    text-align: left;
+}
+
+.or-head .or-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.or-title-row {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    gap: 14px;
+    margin-top: 0;
+    text-align: left;
+}
+
+.or-title-row h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(30px, 3.4vw, 38px);
+    line-height: 1.1;
+    margin: 0;
+    text-align: left;
+}
+
+/* Remove order button */
+.or-remove-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--or-line);
+    background: #fff;
+    color: var(--or-muted);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.or-remove-btn:hover {
+    border-color: var(--or-maroon);
+    background: var(--or-maroon);
+    color: #fff;
+}
