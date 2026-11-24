@@ -216,9 +216,9 @@ export default function ClothingPage() {
             </div>
 
             {shown.length ? (
-              <div className="cl-grid">
-                {shown.map((p) => (
-                  <Link to={`/product?id=${p.id}`} className="cl-card" key={p.id}>
+              <div className="cl-grid" key={JSON.stringify([cats, sizes, price, colors, works, search, sort, current])}>
+                {shown.map((p, i) => (
+                  <Link to={`/product?id=${p.id}`} className="cl-card" style={{ "--i": i }} key={p.id}>
                     <div className="cl-media">
                       {p.isNew && <span className="cl-badge">NEW</span>}
                       <img src={p.image} alt={p.name} />

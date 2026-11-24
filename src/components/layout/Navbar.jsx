@@ -13,6 +13,7 @@ export default function Navbar() {
   const [count, setCount] = useState(bagCount);
   const [query, setQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,6 +37,14 @@ export default function Navbar() {
     };
   }, []);
 
+  // Soft shadow once the page has scrolled
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   // Product search
   const handleSearch = (event) => {
     event.preventDefault();
@@ -52,7 +61,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="site-header">
+    <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
 
       {/* Mobile menu button */}
       <button
@@ -61,7 +70,9 @@ export default function Navbar() {
         aria-label="Toggle navigation menu"
         aria-expanded={menuOpen}
       >
-        {menuOpen ? "✕" : "☰"}
+        <span key={menuOpen ? "close" : "open"} className="menu-glyph">
+          {menuOpen ? "✕" : "☰"}
+        </span>
       </button>
 
       {/* Navigation links */}
@@ -116,7 +127,7 @@ export default function Navbar() {
           <img src="/icons/cart.png" alt="" />
 
           {count > 0 && (
-            <span className="bag-count">{count}</span>
+            <span key={count} className="bag-count">{count}</span>
           )}
         </Link>
 

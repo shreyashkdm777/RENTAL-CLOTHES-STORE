@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "../styles/App.css";
 import "../styles/Productpage.css";
 import { getItem, items, COLORS } from "../data/products.js";
 import { addToBag, MAX_QTY } from "../utils/cart.js";
+import { flyToBag } from "../utils/fly.js";
 
 const price = (n) => "₹" + n.toLocaleString("en-IN");
 
@@ -48,6 +49,7 @@ export default function ProductPage() {
   const [open, setOpen] = useState("details");
   const [guide, setGuide] = useState(false);
   const [added, setAdded] = useState(false);
+  const mainRef = useRef(null);
 
   // Reset options whenever the user opens a different dress
   useEffect(() => {
@@ -69,6 +71,7 @@ export default function ProductPage() {
   const minDate = new Date(Date.now() + 2 * 86400000).toISOString().slice(0, 10);
 
   const add = (goToBag = false) => {
+    if (!goToBag) flyToBag(mainRef.current, item.image);
     addToBag({
       id: item.id,
       name: item.name,
@@ -159,11 +162,11 @@ export default function ProductPage() {
               <span>{item.name}</span>
             </nav>
 
-            <div className="pd-layout">
+            <div className="pd-layout" key={item.id}>
               {/* ---------- Gallery ---------- */}
               <div>
-                <div className="pd-main">
-                  <Photo view={views[view]} alt={item.name} />
+                <div className="pd-main" ref={mainRef}>
+                  <Photo key={`${item.id}-${view}`} view={views[view]} alt={item.name} />
                   <span className="pd-emblem">R</span>
                 </div>
                 <div className="pd-thumbs">
@@ -326,7 +329,11 @@ export default function ProductPage() {
                         {s.title}
                         <i className={`bi ${open === s.id ? "bi-dash" : "bi-plus"}`} />
                       </button>
-                      {open === s.id && <div style={{ paddingBottom: 16, fontSize: 11, lineHeight: 1.7, color: "var(--pd-muted)" }}>{s.content}</div>}
+                      <div className={`pd-acc-panel ${open === s.id ? "is-open" : ""}`}>
+                        <div>
+                          <div style={{ paddingBottom: 16, fontSize: 11, lineHeight: 1.7, color: "var(--pd-muted)" }}>{s.content}</div>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>

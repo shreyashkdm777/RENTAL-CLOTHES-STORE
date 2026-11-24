@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/App.css";
 import { addToBag } from "../utils/cart.js";
+import Reveal from "../components/Reveal.jsx";
+import { flyToBag } from "../utils/fly.js";
 
 // 2. Service highlights shown below the hero banner
 const services = [
@@ -207,30 +209,34 @@ function formatPrice(amount) {
 // Reusable section title component
 function SectionHeading({ id, title, subtitle }) {
   return (
-    <div className="section-heading">
-      <h2 id={id}>{title}</h2>
-      <p>{subtitle}</p>
-    </div>
+    <Reveal className="section-heading">
+      <h2 id={id}>
+        <span className="mask"><span>{title}</span></span>
+      </h2>
+      <p className="rv-item" style={{ "--i": 3 }}>{subtitle}</p>
+    </Reveal>
   );
 }
 
 // Reusable product card component — clicking image or title opens the full Product Page
-function ProductCard({ product, showButton, onAdd }) {
+function ProductCard({ product, showButton, onAdd, index = 0 }) {
   const [justAdded, setJustAdded] = useState(false);
+  const mediaRef = useRef(null);
 
   const handleQuickAdd = () => {
+    flyToBag(mediaRef.current, product.image);
     onAdd(product);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1400);
   };
 
   return (
-    <div className="product-card">
-      <Link to={`/product?id=${product.id}`} className="product-media">
+    <div className="product-card" style={{ "--i": index }}>
+      <Link to={`/product?id=${product.id}`} className="product-media rv-img" ref={mediaRef}>
         <img src={product.image} alt={product.name} />
       </Link>
 
-      <div className="product-info">
+      <div className="product-info rv-item">
         <p className="product-label">{product.label}</p>
         <h3 className="product-name">
           <Link to={`/product?id=${product.id}`}>{product.name}</Link>
@@ -254,11 +260,27 @@ function ProductCard({ product, showButton, onAdd }) {
   );
 }
 
+// FAQ row — glides open instead of snapping
+function FaqItem({ q, a }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`faq-item ${open ? "is-open" : ""}`}>
+      <button type="button" className="faq-q" aria-expanded={open} onClick={() => setOpen(!open)}>
+        {q}
+      </button>
+      <div className="faq-a"><div><p>{a}</p></div></div>
+    </div>
+  );
+}
+
 function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [slideIndex, setSlideIndex] = useState(0);
   const [cardsPerRow, setCardsPerRow] = useState(4);
   const [reviewIndex, setReviewIndex] = useState(2);
+  const [reviewDir, setReviewDir] = useState(1);
+  const [heroReady, setHeroReady] = useState(false);
+  const heroImg = useRef(null);
 
   useEffect(() => {
     function handleResize() {
@@ -275,6 +297,16 @@ function HomePage() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Hero curtain opens once the (large) image has actually loaded
+  useEffect(() => {
+    if (heroImg.current?.complete) setHeroReady(true);
+  }, []);
+
+  const goReview = (i) => {
+    setReviewDir(i >= reviewIndex ? 1 : -1);
+    setReviewIndex(i);
+  };
 
   const filteredProducts =
     selectedCategory === "All"
@@ -294,9 +326,8 @@ function HomePage() {
         <section className="hero-copy">
           <p className="eyebrow">Best Collection</p>
           <h1>
-            Quiet luxury,
-            <br />
-            <span>loudly considered.</span>
+            <span className="hl-line"><span className="hl-inner">Quiet luxury,</span></span>
+            <span className="hl-line"><span className="hl-inner hl-accent">loudly considered.</span></span>
           </h1>
           <p className="hero-description">
             Explore premium clothing and statement accessories curated for every season.
@@ -307,17 +338,27 @@ function HomePage() {
         </section>
 
         <section className="hero-image">
-          <img
-            src="/images/fashion-hero1..png"
-            alt="Models wearing the RentWear fashion collection"
-          />
+          <div
+            className={`hero-frame ${heroReady ? "is-ready" : ""}`}
+            style={{ aspectRatio: "3840 / 1327" }}
+          >
+            <img
+              ref={heroImg}
+              src="/images/fashion-hero1..png"
+              alt="Models wearing the RentWear fashion collection"
+              width="3840"
+              height="1327"
+              onLoad={() => setHeroReady(true)}
+              onError={() => setHeroReady(true)}
+            />
+          </div>
         </section>
 
         {/* SERVICE FEATURES */}
         <section className="service-features">
-          <div className="service-container">
-            {services.map((service) => (
-              <div className="service-item" key={service.title}>
+          <Reveal className="service-container">
+            {services.map((service, i) => (
+              <div className="service-item rv-item" style={{ "--i": i }} key={service.title}>
                 <div className="service-icon">
                   <i className={`bi ${service.icon}`} />
                 </div>
@@ -327,7 +368,7 @@ function HomePage() {
                 </div>
               </div>
             ))}
-          </div>
+          </Reveal>
         </section>
 
         {/* NEW ARRIVALS */}
@@ -352,10 +393,11 @@ function HomePage() {
               ))}
             </div>
 
-            <div className="product-grid">
-              {filteredProducts.map((product) => (
+            <Reveal className="product-grid" key={selectedCategory}>
+              {filteredProducts.map((product, i) => (
                 <ProductCard
                   key={product.id}
+                  index={i}
                   product={product}
                   showButton={true}
                   onAdd={(p) =>
@@ -371,7 +413,7 @@ function HomePage() {
                   }
                 />
               ))}
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -384,13 +426,13 @@ function HomePage() {
               subtitle="Curated edits for every function on your calendar."
             />
 
-            <div className="edit-grid">
-              {occasions.map((occasion) => (
+            <Reveal className="edit-grid">
+              {occasions.map((occasion, i) => (
                 <Link
                   key={occasion.id}
                   to={occasion.to}
-                  className="edit-tile"
-                  style={{ backgroundColor: occasion.tone }}
+                  className="edit-tile rv-img"
+                  style={{ backgroundColor: occasion.tone, "--i": i }}
                 >
                   <img src={occasion.image} alt={occasion.title} />
                   <div className="edit-copy">
@@ -399,7 +441,7 @@ function HomePage() {
                   </div>
                 </Link>
               ))}
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -412,7 +454,7 @@ function HomePage() {
               subtitle="The outfits our customers keep coming back for."
             />
 
-            <div className="carousel">
+            <Reveal className="carousel">
               <button
                 type="button"
                 className="carousel-arrow carousel-arrow--prev"
@@ -429,13 +471,13 @@ function HomePage() {
                     transform: `translateX(-${(currentSlide * 100) / cardsPerRow}%)`,
                   }}
                 >
-                  {trendingProducts.map((item) => (
+                  {trendingProducts.map((item, i) => (
                     <div
                       key={item.id}
                       className="carousel-slide"
                       style={{ flexBasis: `${100 / cardsPerRow}%` }}
                     >
-                      <ProductCard product={item} showButton={false} />
+                      <ProductCard product={item} showButton={false} index={i} />
                     </div>
                   ))}
                 </div>
@@ -449,7 +491,7 @@ function HomePage() {
               >
                 <i className="bi bi-arrow-right" />
               </button>
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -462,15 +504,15 @@ function HomePage() {
               subtitle="From first look to final return, in four simple steps."
             />
 
-            <div className="steps">
-              {steps.map((step) => (
-                <div className="step" key={step.id}>
+            <Reveal className="steps">
+              {steps.map((step, i) => (
+                <div className="step rv-item" style={{ "--i": i }} key={step.id}>
                   <span className="step-number">{step.id}</span>
                   <h3>{step.title}</h3>
                   <p>{step.text}</p>
                 </div>
               ))}
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -483,11 +525,11 @@ function HomePage() {
               subtitle="Rent jewellery and clutches to match your outfit."
             />
 
-            <div className="product-grid">
-              {accessories.map((item) => (
-                <ProductCard key={item.id} product={item} showButton={false} />
+            <Reveal className="product-grid">
+              {accessories.map((item, i) => (
+                <ProductCard key={item.id} product={item} showButton={false} index={i} />
               ))}
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -506,7 +548,7 @@ function HomePage() {
                   key={item.id}
                   type="button"
                   className={index === reviewIndex ? "is-active" : ""}
-                  onClick={() => setReviewIndex(index)}
+                  onClick={() => goReview(index)}
                 >
                   <img src={item.avatar} alt={item.name} />
                 </button>
@@ -517,13 +559,13 @@ function HomePage() {
               <button
                 type="button"
                 className="testimonial-arrow"
-                onClick={() => setReviewIndex(reviewIndex - 1)}
+                onClick={() => goReview(reviewIndex - 1)}
                 disabled={reviewIndex === 0}
               >
                 <i className="bi bi-arrow-left" />
               </button>
 
-              <div className="testimonial-quote">
+              <div className={`testimonial-quote ${reviewDir < 0 ? "from-left" : ""}`} key={reviewIndex}>
                 <h3>{currentReview.title}</h3>
                 <p>{currentReview.text}</p>
 
@@ -545,7 +587,7 @@ function HomePage() {
               <button
                 type="button"
                 className="testimonial-arrow"
-                onClick={() => setReviewIndex(reviewIndex + 1)}
+                onClick={() => goReview(reviewIndex + 1)}
                 disabled={reviewIndex === testimonials.length - 1}
               >
                 <i className="bi bi-arrow-right" />
@@ -556,9 +598,9 @@ function HomePage() {
 
         {/* FEATURED COLLECTIONS (Below Reviews) */}
         <section className="feature-collections" id="collections">
-          <h2>Featured Collections</h2>
+          <Reveal as="h2"><span className="mask"><span>Featured Collections</span></span></Reveal>
 
-          <div className="collection-fan">
+          <Reveal className="collection-fan">
             {collections.map((item, index) => {
               const level = Math.abs(index - centerIndex);
 
@@ -567,7 +609,7 @@ function HomePage() {
                   key={item.id}
                   to={`/product?id=${item.productId}`}
                   className={`collection-card level-${level}`}
-                  style={{ backgroundColor: item.bg, zIndex: 10 - level }}
+                  style={{ backgroundColor: item.bg, zIndex: 10 - level, "--d": index - centerIndex, "--lv": level }}
                 >
                   <img src={item.image} alt={item.alt} />
 
@@ -588,7 +630,7 @@ function HomePage() {
                 </Link>
               );
             })}
-          </div>
+          </Reveal>
         </section>
 
         {/* STYLE JOURNAL */}
@@ -600,11 +642,11 @@ function HomePage() {
               subtitle="Styling ideas and wedding-season inspiration."
             />
 
-            <div className="blog-grid">
-              {blogs.map((blog) => (
-                <div className="blog-card" key={blog.id}>
-                  <img src={blog.image} alt={blog.title} />
-                  <div className="blog-body">
+            <Reveal className="blog-grid">
+              {blogs.map((blog, i) => (
+                <div className="blog-card" style={{ "--i": i }} key={blog.id}>
+                  <img className="rv-img" src={blog.image} alt={blog.title} />
+                  <div className="blog-body rv-item">
                     <h3>{blog.title}</h3>
                     <p>{blog.excerpt}</p>
                     <Link to="/clothes" className="blog-link">
@@ -613,7 +655,7 @@ function HomePage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -628,10 +670,7 @@ function HomePage() {
 
             <div className="faq-list">
               {faqs.map((item) => (
-                <details className="faq-item" key={item.q}>
-                  <summary>{item.q}</summary>
-                  <p>{item.a}</p>
-                </details>
+                <FaqItem key={item.q} q={item.q} a={item.a} />
               ))}
             </div>
           </div>

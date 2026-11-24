@@ -13,6 +13,12 @@ import {
   loadPromo,
   savePromo,
 } from "../utils/cart.js";
+import { prefersReducedMotion, useAnimatedNumber } from "../utils/motion.js";
+
+// Counts up/down to the new amount whenever it changes
+function Money({ value }) {
+  return money(useAnimatedNumber(value));
+}
 
 export default function CartPage() {
   const [cart, setCart] = useState(loadCart);
@@ -36,7 +42,19 @@ export default function CartPage() {
       )
     );
 
-  const remove = (key) => setCart(cart.filter((i) => lineKey(i) !== key));
+  const [leaving, setLeaving] = useState(null);
+
+  // Collapses the row first, then removes it from the bag
+  const remove = (key, row) => {
+    const drop = () => {
+      setCart((c) => c.filter((i) => lineKey(i) !== key));
+      setLeaving(null);
+    };
+    if (prefersReducedMotion() || !row) return drop();
+    row.style.setProperty("--h", `${row.offsetHeight}px`);
+    setLeaving(key);
+    setTimeout(drop, 380);
+  };
 
   const applyPromo = () => {
     const entered = code.trim().toUpperCase();
@@ -82,10 +100,10 @@ export default function CartPage() {
           <div className="ct-layout">
             <section>
               <ul className="ct-items">
-                {cart.map((item) => {
+                {cart.map((item, idx) => {
                   const key = lineKey(item);
                   return (
-                    <li className="ct-item" key={key}>
+                    <li className={`ct-item ${leaving === key ? "is-leaving" : ""}`} style={{ "--i": idx }} key={key}>
                       <Link to={`/product?id=${item.id}`} className="ct-thumb">
                         <img src={item.image} alt={item.name} />
                       </Link>
@@ -98,16 +116,16 @@ export default function CartPage() {
                           Color: {item.color} · Size: {item.size}
                           {item.eventDate ? ` · Event: ${item.eventDate}` : ""}
                         </p>
-                        <button type="button" className="ct-remove" onClick={() => remove(key)}>Remove</button>
+                        <button type="button" className="ct-remove" onClick={(e) => remove(key, e.currentTarget.closest("li"))}>Remove</button>
                       </div>
 
                       <div className="ct-qty" role="group" aria-label={`Quantity for ${item.name}`}>
                         <button type="button" aria-label="Decrease quantity" onClick={() => changeQty(key, -1)}>−</button>
-                        <span>{item.qty}</span>
+                        <span key={item.qty} className="num-pop">{item.qty}</span>
                         <button type="button" aria-label="Increase quantity" onClick={() => changeQty(key, 1)}>+</button>
                       </div>
 
-                      <div className="ct-price">{money(item.rent * item.qty)}</div>
+                      <div className="ct-price"><Money value={item.rent * item.qty} /></div>
                     </li>
                   );
                 })}
@@ -119,11 +137,11 @@ export default function CartPage() {
               <div className="ct-summary">
                 <h2>ORDER SUMMARY</h2>
                 <dl>
-                  <div><dt>Subtotal</dt><dd>{money(subtotal)}</dd></div>
-                  {promo && <div><dt>Promo ({promo.code})</dt><dd>−{money(discount)}</dd></div>}
+                  <div><dt>Subtotal</dt><dd><Money value={subtotal} /></dd></div>
+                  {promo && <div><dt>Promo ({promo.code})</dt><dd>−<Money value={discount} /></dd></div>}
                   <div className="is-soft"><dt>Delivery</dt><dd>Free</dd></div>
-                  <div><dt>Estimated tax</dt><dd>{money(tax)}</dd></div>
-                  <div className="ct-total"><dt>Total</dt><dd>{money(total)}</dd></div>
+                  <div><dt>Estimated tax</dt><dd><Money value={tax} /></dd></div>
+                  <div className="ct-total"><dt>Total</dt><dd><Money value={total} /></dd></div>
                 </dl>
 
                 <div className="ct-promo">
@@ -137,7 +155,7 @@ export default function CartPage() {
                   />
                   <button type="button" onClick={applyPromo}>Apply</button>
                 </div>
-                {promoMsg && <p className={`ct-promo-msg ${promo ? "is-ok" : ""}`}>{promoMsg}</p>}
+                {promoMsg && <p key={promoMsg} className={`ct-promo-msg ${promo ? "is-ok" : ""}`}>{promoMsg}</p>}
 
                 <Link to="/checkout" className="ct-checkout">PROCEED TO CHECKOUT</Link>
               </div>

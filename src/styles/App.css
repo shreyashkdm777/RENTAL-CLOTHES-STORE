@@ -166,7 +166,7 @@ img {
   letter-spacing: -2px;
 }
 
-.hero-copy h1 span {
+.hero-copy h1 .hl-accent {
   color: #79552b;
 }
 

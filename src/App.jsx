@@ -17,11 +17,10 @@ function ScrollToTop() {
   return null;
 }
 
-export default function App() {
+function AnimatedRoutes() {
+  const { pathname } = useLocation();
   return (
-    <>
-      <ScrollToTop />
-      <Navbar />
+    <div key={pathname} className="route-fade">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/clothes" element={<ClothingPage />} />
@@ -35,6 +34,16 @@ export default function App() {
         <Route path="/account" element={<AccountPage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <>
+      <ScrollToTop />
+      <Navbar />
+      <AnimatedRoutes />
     </>
   );
 }
